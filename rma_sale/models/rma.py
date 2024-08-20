@@ -175,3 +175,12 @@ class Rma(models.Model):
         return super()._prepare_delivery_procurements(
             scheduled_date=scheduled_date, qty=qty, uom=uom
         )
+
+    def _prepare_reception_procurement_vals(self, group=None):
+        """
+        Add sale_line_id to the vals for the reception move
+        """
+        vals = super()._prepare_reception_procurement_vals(group)
+        if self.move_id and self.move_id.sale_line_id:
+            vals["sale_line_id"] = self.move_id.sale_line_id.id
+        return vals
